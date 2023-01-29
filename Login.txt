@@ -1,0 +1,99 @@
+-Login Form using C#
+-windows form application with SQL database in Visual Studios
+
+step 1: design the form it includes the ff:
+-label (Welcome)
+-label2 (username)
+-label3 (password)
+-textbox1 txt_username
+-textbox2 txt_password
+-button1 (login)button_login
+-button2 (clear) button_clear
+-button3 (exit) button_exit
+1. go to windows form application c#. left click go to properties and click text change text name to Login.
+2. go to project then click add windows form... then change name to menuform.cs 
+3. go to microsoft SQL Server Management Studio
+4. click databse folder in the left corner then choose new database
+5. database name: user
+6. click user database then tables then new tables
+7. username(columnname), varchar50(datatype)
+password, varchar50
+8. click above the columname then save name Login 
+9. click login folder then click edit 200 rows
+10. Admin(username), admin123(password)
+11. back to windows form click form1.cs then click server explorer then pin
+12. click connect to database then click change and choose Microsoft SQL Server then OK
+13. on to the next page click refresh then click drop down and choose the available device
+14. then go to select db name find user then click test connection and ok
+15. go to server explorer click the device connected then go to tables and then click login 
+16. click form1.cs and double click above (no lets code)
+-using System.Data.SqlClient; (under the last libraries)
+-SqlConnection conn = new SqlConnection(@"");(after public Form1)
+17. click the connected device in server explorer go to properties and copy the path in connection string then paste it inside the quotation mark
+18. click login button 
+String username, user_password;
+
+username = txt_username.Text;
+user_password = txt_password.Text;
+
+try
+{
+String querry = "SELECT * FROM Login WHERE username = '"+txt_username.Text+"' AND password = '"+txt_password.Text+"'";
+SqlDataAdapter sda = new SqlDataAdapter(querry, conn);
+
+DataTable dtable = new DataTable();
+sda.Fill(dtable);
+
+if(dtable.Rows.Count > 0)
+{
+username = txt_username.Text;
+user_password = txt_password.Text;
+//page that needed to be load next
+Menuform form2 = new Menuform();
+form2.Show();
+this.Hide();
+}
+else
+{
+MessageBox.Show("Invalid login details", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+txt_username.Clear();
+txt_password.Clear();
+//to focus username
+txt_username.Focus();
+}
+}
+
+catch
+{
+MessageBox.Show("Error");
+}
+
+final
+{
+conn.Close();
+}
+
+private void button_clear_Click(object sender, EventArgs e)
+{
+txt_username.Clear();
+txt_password.Clear();
+
+txt_username.Focus();
+}
+
+private void button_exit_Click(object sender, EventArgs e)
+{
+DialogResult res;
+res = MessageBox.Show("Do you want to exit", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+if (res == DialogResult.Yes)
+{
+Application.Exit();
+}
+else
+{
+this.Show();
+}
+}
+
+
+
